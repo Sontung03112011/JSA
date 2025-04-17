@@ -1,0 +1,32 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container{
+    display: grid;
+    width: 900px;
+    height: 900px;
+    transition: all 0.5s ease-in-out;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+
+.container:hover{
+    transition: all  0.5s ease-in-out;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+
+.item{
+    border: 2px black;
+    margin-top: 100px;
+    margin-left: 50px;
+}
+
+img{
+    width: 200px;
+    height: 200px;
+}

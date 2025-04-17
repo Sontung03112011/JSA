@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 100px);
+            grid-gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .card {
+            width: 100px;
+            height: 100px;
+            background-color: gray;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Game Lật Thẻ</h1>
+    <h2>Score: <span id="score">0</span></h2>
+    <div id="game-board"></div>
+    <script>
+        var cardsArray = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', 'E', 'E', 'F', 'F', 'G', 'G', 'H', 'H'];
+        var shuffledCards = cardsArray.sort(function() { return Math.random() - 0.5; });
+        var gameBoard = document.getElementById('game-board');
+        var score = 0;
+        var firstCard = null;
+        var secondCard = null;
+        var lockBoard = false;
+
+        function createBoard() {
+            for (var i = 0; i < shuffledCards.length; i++) {
+                var card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.value = shuffledCards[i];
+                card.innerHTML = '?';
+                card.onclick = flipCard;
+                gameBoard.appendChild(card);
+            }
+        }
+
+        function flipCard() {
+            if (lockBoard || this === firstCard) return;
+
+            this.innerHTML = this.dataset.value;
+
+            if (firstCard === null) {
+                firstCard = this;
+            } else {
+                secondCard = this;
+                lockBoard = true;
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            if (firstCard.dataset.value === secondCard.dataset.value) {
+                score++;
+                document.getElementById('score').innerHTML = score;
+                resetBoard();
+            } else {
+                setTimeout(function() {
+                    firstCard.innerHTML = '?';
+                    secondCard.innerHTML = '?';
+                    resetBoard();
+                }, 1000);
+            }
+        }
+
+        function resetBoard() {
+            firstCard = null;
+            secondCard = null;
+            lockBoard = false;
+        }
+
+        createBoard();
+    </script>
+</body>
+</html>

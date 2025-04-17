@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            border: 2px solid black;
+            border-radius: 15px;
+            width: 25%;
+        }
+        
+
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        input {
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 200px;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #errorMessages {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container"> 
+    <h2>Đăng Nhập</h2>
+    <form id="loginForm">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" required><br><br>
+        
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+        
+        <label for="verifyPassword">Verify Password:</label><br>
+        <input type="password" id="verifyPassword" name="verifyPassword" required><br><br>
+
+        <button type="submit">Đăng Nhập</button>
+    </form>
+
+    <p id="errorMessages"></p>
+
+    </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+
+            let errorMessages = [];
+
+            let username = document.getElementById('username').value;
+            let email = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+            let verifyPassword = document.getElementById('verifyPassword').value;
+
+            if (username.length < 6 || username.length > 18) {
+                errorMessages.push('Username phải có từ 6 đến 18 ký tự.');
+            }
+
+            let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!emailPattern.test(email)) {
+                errorMessages.push('Email không hợp lệ.');
+            }
+
+            if (password.length < 8 || password.length > 20) {
+                errorMessages.push('Password phải có từ 8 đến 20 ký tự.');
+            }
+
+            if (password !== verifyPassword) {
+                errorMessages.push('Password và Verify Password phải trùng khớp.');
+            }
+
+            if (errorMessages.length > 0) {
+                document.getElementById('errorMessages').innerHTML = errorMessages.join('<br>');
+            } else {
+                document.getElementById('errorMessages').innerHTML = 'Đăng nhập thành công!';
+            }
+        });
+    </script>
+
+</body>
+</html>
