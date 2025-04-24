@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mindx Cinema</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    .hidden { display: none; }
+    .movie { border: 1px solid #ccc; padding: 10px; margin: 10px 0; cursor: pointer; }
+    .page { margin-top: 20px; }
+    button { margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+  <!-- Page: Login -->
+  <div id="loginPage" class="page">
+    <h2>Đăng nhập</h2>
+    <input type="text" id="username" placeholder="Tên người dùng" />
+    <br />
+    <input type="password" id="password" placeholder="Mật khẩu" />
+    <br />
+    <button onclick="login()">Đăng nhập</button>
+  </div>
+
+  <!-- Page: Movie List -->
+  <div id="moviePage" class="page hidden">
+    <h2>Danh sách phim</h2>
+    <div id="movieList"></div>
+    <button onclick="logout()">Đăng xuất</button>
+  </div>
+
+  <!-- Page: Movie Detail -->
+  <div id="detailPage" class="page hidden">
+    <h2>Chi tiết phim</h2>
+    <div id="movieDetail"></div>
+    <button onclick="showPage('moviePage')">Quay lại danh sách</button>
+  </div>
+
+  <script>
+    // Xử lý hiển thị page
+    function showPage(pageId) {
+      document.getElementById("loginPage").classList.add("hidden");
+      document.getElementById("moviePage").classList.add("hidden");
+      document.getElementById("detailPage").classList.add("hidden");
+      document.getElementById(pageId).classList.remove("hidden");
+    }
+
+    // Kiểm tra nếu đã login
+    window.onload = function() {
+      const user = localStorage.getItem("user");
+      if (user) {
+        showPage("moviePage");
+        fetchMovies();
+      }
+    }
+
+    // Đăng nhập
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      if (username && password) {
+        localStorage.setItem("user", JSON.stringify({ username }));
+        showPage("moviePage");
+        fetchMovies();
+      } else {
+        alert("Vui lòng nhập đầy đủ thông tin!");
+      }
+    }
+
+    // Đăng xuất
+    function logout() {
+      localStorage.removeItem("user");
+      showPage("loginPage");
+    }
+
+    // Gọi API để hiển thị danh sách phim
+    async function fetchMovies() {
+      const res = await fetch("https://mocki.io/v1/570c5e5c-7482-4ae2-b0f3-f1b50b58b9d2");
+      const movies = await res.json();
+
+      const movieList = document.getElementById("movieList");
+      movieList.innerHTML = "";
+
+      movies.forEach((movie, index) => {
+        const div = document.createElement("div");
+        div.className = "movie";
+        div.textContent = movie.title;
+        div.onclick = () => showMovieDetail(movie);
+        movieList.appendChild(div);
+      });
+    }
+
+    // Hiển thị chi tiết phim
+    function showMovieDetail(movie) {
+      document.getElementById("movieDetail").innerHTML = `
+        <h3>${movie.title}</h3>
+        <p>${movie.description || "Không có mô tả"}</p>
+      `;
+      showPage("detailPage");
+    }
+  </script>
+</body>
+</html>
