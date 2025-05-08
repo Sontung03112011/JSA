@@ -1,0 +1,17 @@
+body {
+    background: #4a90e2;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 725px;
+    margin: 0;
+  }
+  
+  .weather-box {
+    background-color: white;
+    max-width: 400px;
+    width: 100%;
+    border-radius: 12px;
+  }
