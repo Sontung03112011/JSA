@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Form Validation</title>
+  <style>
+    .error {
+      color: red;
+      font-size: 0.9em;
+    }
+    input {
+      display: block;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <form id="myForm">
+    <label>Username:
+      <input type="text" id="username" />
+      <div class="error" id="username-error"></div>
+    </label>
+
+    <label>Email:
+      <input type="email" id="email" />
+      <div class="error" id="email-error"></div>
+    </label>
+
+    <label>Phone Number:
+      <input type="text" id="phone" />
+      <div class="error" id="phone-error"></div>
+    </label>
+
+    <label>Password:
+      <input type="password" id="password" />
+      <div class="error" id="password-error"></div>
+    </label>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('myForm');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+
+      let isValid = true;
+
+      const showError = (id, message) => {
+        document.getElementById(id).textContent = message;
+        isValid = false;
+      };
+
+      // Clear previous errors
+      ['username', 'email', 'phone', 'password'].forEach(f => {
+        document.getElementById(`${f}-error`).textContent = '';
+      });
+
+      if (!username) showError('username-error', 'invalid: username bị sai');
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+        showError('email-error', 'invalid: email bị sai');
+      if (!phone || !/^[0-9]{9,15}$/.test(phone))
+        showError('phone-error', 'invalid: phone number bị sai');
+      if (
+        !password ||
+        !/[a-z]/.test(password) ||
+        !/[A-Z]/.test(password) ||
+        !/[0-9]/.test(password) ||
+        !/[!@#$%^&*(),.?":{}|<>]/.test(password) ||
+        password.length < 8
+      )
+        showError('password-error', 'invalid: password bị sai');
+
+      if (isValid) {
+        alert('Form hợp lệ và đã gửi!');
+        form.reset();
+      }
+    });
+  </script>
+</body>
+</html>
